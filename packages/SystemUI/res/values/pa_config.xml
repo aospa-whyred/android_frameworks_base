@@ -45,6 +45,9 @@
         caffeine,screenstabilization,screen_record,dataswitch,heads_up
     </string>
 
+    <!-- Whether to show VoLTE icon in the status bar -->
+    <bool name="config_display_volte">true</bool>
+
     <!-- Allow devices to use a lower screenrecording bitrate because of old hardware -->
     <bool name="config_device_needs_lower_bitrate">false</bool>
 
