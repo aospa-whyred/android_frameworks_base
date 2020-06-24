@@ -3875,6 +3875,15 @@ public class CarrierConfigManager {
     public static final String KEY_DEFAULT_RTT_MODE_INT =
             "default_rtt_mode_int";
 
+    /**
+     * Indicating whether DUN APN should be disabled when the device is roaming. In that case,
+     * the default APN (i.e. internet) will be used for tethering.
+     *
+     * @hide
+     */
+    public static final String KEY_DISABLE_DUN_APN_WHILE_ROAMING =
+            "disable_dun_apn_while_roaming";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -4413,6 +4422,7 @@ public class CarrierConfigManager {
         sDefaults.putStringArray(KEY_MISSED_INCOMING_CALL_SMS_PATTERN_STRING_ARRAY, new String[0]);
         sDefaults.putBoolean(KEY_CARRIER_SUPPORTS_MULTIANCHOR_CONFERENCE, false);
         sDefaults.putInt(KEY_DEFAULT_RTT_MODE_INT, 0);
+        sDefaults.putBoolean(KEY_DISABLE_DUN_APN_WHILE_ROAMING, false);
     }
 
     /**
