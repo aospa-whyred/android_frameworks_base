@@ -402,7 +402,7 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dismissScreenshot("back pressed", true);
+                    dismissScreenshot("back pressed", false);
                     return true;
                 }
                 return false;
