@@ -21616,6 +21616,8 @@ public class PackageManagerService extends IPackageManager.Stub
                         .getUriFor(Secure.INSTANT_APPS_ENABLED), false, co, UserHandle.USER_ALL);
         co.onChange(true);
 
+        mAppsFilter.onSystemReady();
+
         // Disable any carrier apps. We do this very early in boot to prevent the apps from being
         // disabled after already being started.
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(
@@ -21765,8 +21767,6 @@ public class PackageManagerService extends IPackageManager.Stub
         mInstallerService.restoreAndApplyStagedSessionIfNeeded();
 
         mExistingPackages = null;
-
-        mAppsFilter.onSystemReady();
     }
 
     public void waitForAppDataPrepared() {
