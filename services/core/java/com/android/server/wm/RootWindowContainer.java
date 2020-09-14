@@ -2592,7 +2592,7 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
         mDisplayAccessUIDs.clear();
         for (int displayNdx = getChildCount() - 1; displayNdx >= 0; --displayNdx) {
             final DisplayContent displayContent = getChildAt(displayNdx);
-            // Only bother calculating the whitelist for private displays
+            // Only bother calculating the allowlist for private displays
             if (displayContent.isPrivate()) {
                 mDisplayAccessUIDs.append(
                         displayContent.mDisplayId, displayContent.getPresentUIDs());
