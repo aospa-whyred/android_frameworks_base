@@ -79,6 +79,7 @@ public class BrightnessController implements ToggleSlider.Listener {
     private final Context mContext;
     private final ToggleSlider mControl;
     private final boolean mAutomaticAvailable;
+    private final boolean mLinearBrightnessSlider;
     private final DisplayManager mDisplayManager;
     private final CurrentUserTracker mUserTracker;
     private final IVrManager mVrManager;
@@ -324,6 +325,8 @@ public class BrightnessController implements ToggleSlider.Listener {
 
         mAutomaticAvailable = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
+        mLinearBrightnessSlider = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_linearBrightnessSlider);
         mDisplayManager = context.getSystemService(DisplayManager.class);
         mVrManager = IVrManager.Stub.asInterface(ServiceManager.getService(
                 Context.VR_SERVICE));
@@ -379,9 +382,16 @@ public class BrightnessController implements ToggleSlider.Listener {
             maxBacklight = mMaximumBacklight;
             settingToChange = Settings.System.SCREEN_BRIGHTNESS_FLOAT;
         }
-        final float valFloat = MathUtils.min(convertGammaToLinearFloat(value,
-                minBacklight, maxBacklight),
-                1.0f);
+
+        final float valFloat;
+        if (!mLinearBrightnessSlider) {
+            valFloat = MathUtils.min(convertGammaToLinearFloat(value,
+                    minBacklight, maxBacklight),
+                    1.0f);
+	} else {
+            valFloat = (value < minBacklight) ? minBacklight : value;
+        }
+
         if (stopTracking) {
             // TODO(brightnessfloat): change to use float value instead.
             MetricsLogger.action(mContext, metric,
@@ -442,16 +452,24 @@ public class BrightnessController implements ToggleSlider.Listener {
             min = mMinimumBacklight;
             max = mMaximumBacklight;
         }
-        // convertGammaToLinearFloat returns 0-1
-        if (BrightnessSynchronizer.floatEquals(brightnessValue,
+        if (!mLinearBrightnessSlider) {
+            // convertGammaToLinearFloat returns 0-1
+            if (BrightnessSynchronizer.floatEquals(brightnessValue,
                 convertGammaToLinearFloat(mControl.getValue(), min, max))) {
-            // If the value in the slider is equal to the value on the current brightness
-            // then the slider does not need to animate, since the brightness will not change.
-            return;
+                // If the value in the slider is equal to the value on the current brightness
+                // then the slider does not need to animate, since the brightness will not change.
+		return;
+            }
+            final int sliderVal = convertLinearToGammaFloat(brightnessValue, min, max);
+            mControl.setMax(GAMMA_SPACE_MAX);
+            animateSliderTo(sliderVal);
+        } else {
+            final int maxBrightnessRounded = Math.round(max);
+            final int minBrightnessRounded = Math.round(min);
+	    final int brightnessValueRounded = Math.round(brightnessValue);
+            mControl.setMax(maxBrightnessRounded - minBrightnessRounded);
+            animateSliderTo(brightnessValueRounded - minBrightnessRounded);
         }
-        // Returns GAMMA_SPACE_MIN - GAMMA_SPACE_MAX
-        final int sliderVal = convertLinearToGammaFloat(brightnessValue, min, max);
-        animateSliderTo(sliderVal);
     }
 
     private void animateSliderTo(int target) {
