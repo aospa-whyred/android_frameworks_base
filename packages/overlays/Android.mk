@@ -32,10 +32,13 @@ LOCAL_REQUIRED_MODULES := \
 	AccentColorTangerineOverlay \
 	DisplayCutoutEmulationCornerOverlay \
 	DisplayCutoutEmulationDoubleOverlay \
-    DisplayCutoutEmulationHoleOverlay \
+        DisplayCutoutEmulationHoleOverlay \
 	DisplayCutoutEmulationTallOverlay \
 	DisplayCutoutEmulationWaterfallOverlay \
 	FontNotoSerifSourceOverlay \
+	FontKaiOverlay \
+	FontVictorOverlay \
+	FontSamOverlay \
 	IconPackCircularAndroidOverlay \
 	IconPackCircularLauncherOverlay \
 	IconPackCircularSettingsOverlay \
